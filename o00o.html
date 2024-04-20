@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Video Reveal</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: rgb(242, 242, 237); /* Ivory background */
+        }
+        .video-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            cursor: none; /* Hide the default cursor */
+        }
+        .video-container video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            clip-path: circle(0% at 0 0); /* Initial state - no video visible */
+        }
+        .logo {
+            position: absolute;
+            top: -20px; /* Adjusted for top left corner */
+            left: -10px; /* Adjusted for top left corner */
+            width: 250px; /* Set your desired size */
+            height: auto;
+            transition: filter 0.25s; /* Smooth transition for hover effect */
+        }
+        .logo:hover {
+            filter: invert(100%); /* Inverts colors on hover */
+        }
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the text exactly */
+            font-family: 'Futura', sans-serif;
+            font-size: 2rem;
+            color: black;
+            text-align: center;
+            transition: text-shadow 0.2s ease; /* Smooth transition for text shadow */
+        }
+        .shadow {
+            text-shadow: 4px 3px 5px rgba(0, 0, 0, 0.5); /* Shadow appears when class is added */
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay loop muted>
+            <source src="rachel-ending.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <img src="o00o-futura-b.png" class="logo"> <!-- Logo added here -->
+        <div id="text" class="center-text">Hi, world.</div> <!-- Centered text -->
+    </div>
+    <script>
+        const video = document.querySelector('.video-container video');
+        const textElement = document.getElementById('text');
+
+        document.addEventListener('mousemove', function(e) {
+            const x = e.clientX;
+            const y = e.clientY;
+            const radius = 150; // Radius of the circle
+            video.style.clipPath = `circle(${radius}px at ${x}px ${y}px)`;
+
+            // Get the bounding rectangle of the text
+            const rect = textElement.getBoundingClientRect();
+            // Check if the cursor is within the radius of the text
+            const distance = Math.sqrt((rect.left + rect.width / 2 - x) ** 2 + (rect.top + rect.height / 2 - y) ** 2);
+
+            if (distance < radius) {
+                textElement.classList.add('shadow');
+            } else {
+                textElement.classList.remove('shadow');
+            }
+        });
+    </script>
+</body>
+</html>
